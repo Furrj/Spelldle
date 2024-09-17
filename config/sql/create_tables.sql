@@ -58,15 +58,6 @@ CREATE TABLE users.data
     role users.role DEFAULT 'U'
 );
 
-CREATE TABLE users.guest_data
-(
-    user_id    INTEGER PRIMARY KEY UNIQUE REFERENCES users.ids(user_id),
-    username   VARCHAR(32) UNIQUE,
-    game_session_id UUID REFERENCES game_sessions.ids(game_session_id),
-    next_available_session BIGINT,
-    role users.role DEFAULT 'G'
-);
-
 CREATE TABLE guesses.categories
 (
   game_session_id UUID REFERENCES game_sessions.ids(game_session_id),

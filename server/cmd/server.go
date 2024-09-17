@@ -68,6 +68,7 @@ func main() {
 	router.POST(consts.RouteUrlSpawnNewGameSession, routes.SpawnNewGameSession(db))
 	router.POST(consts.RouteUrlGetCorrectSpellInfo, routes.GetCorrectSpellInfo(db))
 	router.POST(consts.RouteUrlGetSpellList, routes.GetSpellList(db))
+	router.POST(consts.RouteUrlRegisterGuest, routes.RegisterGuest(db))
 
 	router.Use(spa.Middleware("/", "client"))
 

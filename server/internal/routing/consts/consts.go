@@ -15,5 +15,7 @@ const (
 	RouteUrlSpawnNewGameSession string = RouteUrlBase + "/spawnNewGameSession"
 	RouteUrlGetCorrectSpellInfo string = RouteUrlBase + "/getCorrectSpellInfo"
 	RouteUrlGetSpellList        string = RouteUrlBase + "/getSpellList"
+	RouteUrlRegisterGuest       string = RouteUrlBase + "/registerGuest"
 	SpellGuessLimit             uint   = 3
+	CookieKeyGuest              string = "guest_cookie"
 )

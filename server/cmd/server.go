@@ -47,7 +47,8 @@ func main() {
 	if os.Getenv("MODE") == "DEV" {
 		fmt.Println("**DEV MODE DETECTED, ENABLING CORS**")
 		config := cors.DefaultConfig()
-		config.AllowAllOrigins = true
+		config.AllowOrigins = []string{"http://localhost:5000", "http://localhost:5173"}
+		config.AllowCredentials = true
 		config.AllowMethods = []string{"POST", "GET"}
 		config.AllowHeaders = []string{consts.HeaderTypeAuthorization, "Content-Type"}
 		router.Use(cors.New(config))

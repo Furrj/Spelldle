@@ -1,14 +1,17 @@
 import styles from "./Login.module.scss";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { apiRequestLogin } from "../../utils/requests.ts";
+import {
+	apiRequestLogin,
+	apiRequestRegisterGuest,
+} from "../../utils/requests.ts";
 import {
 	INIT_USERINPUT_LOGIN,
 	type T_APIRESULT_LOGIN,
 	type T_USERINPUT_LOGIN,
 } from "../../types";
 import { togglePasswordLogin } from "../../utils/uiHandlers.ts";
-import { AxiosResponse } from "axios";
+import { AxiosResponse, HttpStatusCode } from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { sendTokensToLocalStorage } from "../../utils/methods.tsx";
 import { QUERY_KEYS } from "../../utils/consts.ts";
@@ -21,7 +24,7 @@ const Login: React.FC = () => {
 
 	const navigate = useNavigate();
 	const queryClient = useQueryClient();
-	const mutation = useMutation({
+	const loginMutation = useMutation({
 		mutationFn: (
 			userInput: T_USERINPUT_LOGIN,
 		): Promise<AxiosResponse<T_APIRESULT_LOGIN>> => {
@@ -42,6 +45,23 @@ const Login: React.FC = () => {
 				navigate("/");
 			} else {
 				setIncorrectInfo(true);
+			}
+		},
+	});
+
+	const registerGuessMutation = useMutation({
+		mutationFn: (): Promise<AxiosResponse<any>> => apiRequestRegisterGuest(),
+		onError(err) {
+			console.log(err);
+		},
+		// TODO: handle error vs incorrect info
+		onSuccess(data) {
+			if (data.status === HttpStatusCode.Created) {
+				queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USER_DATA] });
+				queryClient.invalidateQueries({
+					queryKey: [QUERY_KEYS.GAME_SESSION_INFO],
+				});
+				navigate("/");
 			}
 		},
 	});
@@ -94,19 +114,26 @@ const Login: React.FC = () => {
 					<br />
 				</div>
 			)}
-			<button
-				className={styles.login}
-				style={{ marginTop: "10px" }}
-				onClick={() => {
-					mutation.mutate(userInput);
-				}}
-			>
-				Login
-			</button>
-			or
-			<Link to={"/register"}>
-				<button className={styles.register}>Register</button>
-			</Link>
+			<div className={styles.buttons}>
+				<button
+					className={styles.login}
+					style={{ marginTop: "10px" }}
+					onClick={() => {
+						loginMutation.mutate(userInput);
+					}}
+				>
+					Login
+				</button>
+				Don't have an account?
+				<div className={styles.no_account}>
+					<Link to={"/register"}>
+						<button className={styles.register}>Register</button>
+					</Link>
+					<button onClick={() => registerGuessMutation.mutate()}>
+						Play as Guest
+					</button>
+				</div>
+			</div>
 		</div>
 	);
 };

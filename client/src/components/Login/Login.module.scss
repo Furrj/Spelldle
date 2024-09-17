@@ -31,12 +31,23 @@
 		overflow-x: auto;
 	}
 
-	button {
-		font-size: large;
-		border-radius: 10px;
-		padding: 5px;
-		font-weight: bold;
-		box-shadow: none;
-		border: 1px solid white;
+	.buttons {
+		@include flex-center;
+		gap: 10px;
+		margin-top: 5px;
+
+		.no_account {
+			display: flex;
+			gap: 10px;
+		}
+
+		button {
+			font-size: large;
+			border-radius: 10px;
+			padding: 5px;
+			font-weight: bold;
+			box-shadow: none;
+			border: 1px solid white;
+		}
 	}
 }

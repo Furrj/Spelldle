@@ -27,6 +27,7 @@ const API_ROUTES = {
 	SPAWN_NEW_GAME_SESSION: ROUTE_PREFIX + "/api/spawnNewGameSession",
 	GET_CORRECT_SPELL_INFO: ROUTE_PREFIX + "/api/getCorrectSpellInfo",
 	GET_SPELL_LIST: ROUTE_PREFIX + "/api/getSpellList",
+	REGISTER_GUEST: ROUTE_PREFIX + "/api/registerGuest",
 };
 
 export async function apiRequestLogin(
@@ -196,4 +197,11 @@ export async function apiRequestGetCorrectSpellInfo(
 	spell.categories = new Map(Object.entries(spell.categories));
 
 	return spell;
+}
+
+export async function apiRequestRegisterGuest(): Promise<AxiosResponse<any>> {
+	return await axios({
+		method: "POST",
+		url: API_ROUTES.REGISTER_GUEST,
+	});
 }

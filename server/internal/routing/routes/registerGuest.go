@@ -3,6 +3,7 @@ package routes
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"spelldle.com/server/internal/auth"
@@ -72,12 +73,24 @@ func RegisterGuest(db *dbHandler.DBHandler) gin.HandlerFunc {
 func setCookieHandler(ctx *gin.Context, jwt string) {
 	cookieName := consts.CookieKeyGuest
 	cookieValue := jwt
-	maxAge := 2592000 // one month
+	// maxAge := 2592000 // one month
 	// TODO: change in prod
 	path := "/"
 	domain := "localhost"
-	secure := false
+	secure := true
 	httpOnly := true
 
-	ctx.SetCookie(cookieName, cookieValue, maxAge, path, domain, secure, httpOnly)
+	cookie := http.Cookie{
+		Name:     cookieName,
+		Value:    cookieValue,
+		Expires:  time.Now().Add(24 * 30 * time.Hour),
+		Path:     path,
+		Domain:   domain,
+		Secure:   secure,
+		HttpOnly: httpOnly,
+		SameSite: http.SameSiteStrictMode,
+	}
+
+	// ctx.SetCookie(cookieName, cookieValue, maxAge, path, domain, secure, httpOnly)
+	http.SetCookie(ctx.Writer, &cookie)
 }

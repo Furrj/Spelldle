@@ -56,6 +56,7 @@ func main() {
 
 	// init middleware handler
 	middleware := middleware.NewMiddlewareHandler()
+	router.Use(middleware.HandleCookie())
 	router.Use(middleware.ValidateAccessToken())
 
 	router.SetTrustedProxies([]string{"127.0.0.1"})

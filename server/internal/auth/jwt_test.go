@@ -15,7 +15,7 @@ func TestJWT(t *testing.T) {
 	}
 
 	t.Run("JWT creation test", func(t *testing.T) {
-		jwt, err := CreateJWTFromUserID(1)
+		jwt, err := CreateJWTFromUserID(1, 7)
 		if err != nil {
 			t.Errorf("Error creating JWT: %+v\n", err)
 		}

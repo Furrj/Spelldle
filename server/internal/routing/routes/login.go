@@ -63,7 +63,7 @@ func Login(db *dbHandler.DBHandler) gin.HandlerFunc {
 			return
 		}
 
-		accessToken, err := auth.CreateJWTFromUserID(userID)
+		accessToken, err := auth.CreateJWTFromUserID(userID, 7)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, response)
 			return

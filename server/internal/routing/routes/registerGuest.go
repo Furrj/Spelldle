@@ -59,18 +59,18 @@ func RegisterGuest(db *dbHandler.DBHandler) gin.HandlerFunc {
 		}
 
 		// generate JWT
-		accessToken, err := auth.CreateJWTFromUserID(userID)
+		accessToken, err := auth.CreateJWTFromUserID(userID, 30)
 		if err != nil {
 			ctx.Status(http.StatusInternalServerError)
 			return
 		}
 
-		setCookieHandler(ctx, accessToken)
+		setCookieHandler(ctx, accessToken, 30)
 		ctx.Status(http.StatusCreated)
 	}
 }
 
-func setCookieHandler(ctx *gin.Context, jwt string) {
+func setCookieHandler(ctx *gin.Context, jwt string, expiryDays time.Duration) {
 	cookieName := consts.CookieKeyGuest
 	cookieValue := jwt
 	// maxAge := 2592000 // one month
@@ -83,7 +83,7 @@ func setCookieHandler(ctx *gin.Context, jwt string) {
 	cookie := http.Cookie{
 		Name:     cookieName,
 		Value:    cookieValue,
-		Expires:  time.Now().Add(24 * 30 * time.Hour),
+		Expires:  time.Now().Add(time.Hour * 24 * expiryDays),
 		Path:     path,
 		Domain:   domain,
 		Secure:   secure,

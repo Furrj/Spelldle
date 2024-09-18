@@ -3,14 +3,15 @@ package auth
 import (
 	"errors"
 	"fmt"
-	"github.com/golang-jwt/jwt/v5"
 	"os"
-	"spelldle.com/server/shared/types"
 	"strconv"
 	"time"
+
+	"github.com/golang-jwt/jwt/v5"
+	"spelldle.com/server/shared/types"
 )
 
-func CreateJWTFromUserID(userID types.UserID) (string, error) {
+func CreateJWTFromUserID(userID types.UserID, expiryDays time.Duration) (string, error) {
 	var (
 		key []byte
 		t   *jwt.Token
@@ -18,15 +19,14 @@ func CreateJWTFromUserID(userID types.UserID) (string, error) {
 		err error
 	)
 
-	expiryTime := time.Now().Unix() + 604800
+	expiryTime := time.Now().Add(time.Hour * 24 * expiryDays)
 
 	key = []byte(os.Getenv("JWT_SECRET"))
-	t = jwt.NewWithClaims(jwt.SigningMethodHS256,
-		jwt.MapClaims{
-			"iss": "spelldle.com/api",
-			"sub": strconv.FormatUint(uint64(userID), 10),
-			"exp": expiryTime,
-		})
+	t = jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{
+		Issuer:    "spelldle.com",
+		Subject:   strconv.FormatUint(uint64(userID), 10),
+		ExpiresAt: &jwt.NumericDate{Time: expiryTime},
+	})
 	s, err = t.SignedString(key)
 	if err != nil {
 		return "", errors.New("error creating signed string")
@@ -44,7 +44,6 @@ func ParseAndValidateJWT(tokenString string, secretKey []byte) (*jwt.Token, erro
 		}
 		return secretKey, nil
 	})
-
 	if err != nil {
 		return nil, err
 	}

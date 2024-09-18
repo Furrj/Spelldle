@@ -64,7 +64,7 @@ func (mw *MiddlewareHandler) ValidateAccessToken() gin.HandlerFunc {
 		if err != nil {
 			fmt.Printf("error getting expiry: %+v\n", err)
 		} else {
-			fmt.Printf("EXPIRY: %+v\n", expiry)
+			fmt.Printf("EXPIRY: %+v\n", expiry.Time)
 		}
 
 		userID, err := stringToUint(userIdAsString)

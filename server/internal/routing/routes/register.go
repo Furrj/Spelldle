@@ -118,7 +118,7 @@ func Register(db *dbHandler.DBHandler) gin.HandlerFunc {
 		}
 
 		// generate JWT
-		accessToken, err := auth.CreateJWTFromUserID(userID)
+		accessToken, err := auth.CreateJWTFromUserID(userID, 7)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, response)
 			return

@@ -28,7 +28,10 @@ const InfoPopup: React.FC<IProps> = (props) => {
 						you the status of your guess
 						<ul>
 							<li>Green: Correct</li>
-							<li>Yellow (categories with multiple inputs): Some correct</li>
+							<li>
+								Yellow (categories with multiple inputs): Partly correct, but
+								not all possible correct
+							</li>
 							<li>Red: Incorrect</li>
 						</ul>
 					</li>

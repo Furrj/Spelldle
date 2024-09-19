@@ -50,9 +50,9 @@ export function translateIdsToDisplay(
 				];
 				// TODO: parse from JSON somehow instead of hardcode
 				if (categoryInfo.id === "level") {
-					if (id[1] == 1) display.unshift("Ritual");
+					if (id[1] == 1) display.push("Ritual");
 				} else {
-					if (id[1] == 1) display.unshift("Concentration");
+					if (id[1] == 1) display.push("Concentration");
 				}
 				return display;
 			}

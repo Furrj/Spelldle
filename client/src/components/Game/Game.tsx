@@ -112,13 +112,18 @@ const Game: React.FC<IProps> = (props) => {
 	const [showGuessBox, setShowGuessBox] = useState<boolean>(true);
 	useEffect(() => {
 		if (isSuccess && !isFetching && data !== undefined) {
+			// trigger game over
 			if (data.guesses.correct || data.guesses.spells.length >= LIMITS.SPELL) {
 				props.setShowingPostGame(true);
 				queryClient.invalidateQueries({
 					queryKey: [QUERY_KEYS.CORRECT_SPELL_INFO],
 				});
+				// trigger out of category guesses
 			} else if (data.guesses.categories.length >= LIMITS.CATEGORY) {
 				setShowGuessBox(false);
+				// else show category guesses
+			} else if (!showGuessBox) {
+				setShowGuessBox(true);
 			}
 		}
 	}, [data, isFetching, isSuccess]);
